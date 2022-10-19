@@ -1,5 +1,7 @@
 import pygame
 import sys
+from dataclasses import dataclass
+from typing import List
 
 # Setup
 pygame.init()
@@ -15,45 +17,70 @@ pygame.display.set_caption('Space Invaders')
 
 # Constants
 
-SHIP_SIZE = 30
-SHIP_STARTING_X = SCREEN_WIDTH / 2 - SHIP_SIZE / 2
-SHIP_STARTING_Y = SCREEN_HEIGHT - SHIP_SIZE
-SHIP = pygame.Rect(SHIP_STARTING_X, SHIP_STARTING_Y, SHIP_SIZE, SHIP_SIZE)
-SHIP_SPEED = 1
-SHIP_COLOR = pygame.Color("red")
+SHIP_SIZE        = 30
+SHIP_STARTING_X  = SCREEN_WIDTH / 2 - SHIP_SIZE / 2
+SHIP_STARTING_Y  = SCREEN_HEIGHT - SHIP_SIZE
+SHIP             = pygame.Rect(SHIP_STARTING_X, SHIP_STARTING_Y, SHIP_SIZE, SHIP_SIZE)
+SHIP_SPEED       = 1
+SHIP_COLOR       = pygame.Color("red")
 
-INVADER_SIZE = 30
-INVADER_SPAWN_X = SCREEN_WIDTH / 2
-INVADER_SPAWN_Y = 0 + INVADER_SIZE * 2
-INVADER = pygame.Rect(INVADER_SPAWN_X, INVADER_SPAWN_Y, INVADER_SIZE, INVADER_SIZE)
-INVADER_SPEED = 1
-INVADER_COLOR = pygame.Color("blue")
+INVADER_SIZE     = 30
+INVADER_SPAWN_X  = SCREEN_WIDTH / 2
+INVADER_SPAWN_Y  = 0 + INVADER_SIZE * 2
+INVADER          = pygame.Rect(INVADER_SPAWN_X, INVADER_SPAWN_Y, INVADER_SIZE, INVADER_SIZE)
+INVADER_SPEED    = 1
+INVADER_COLOR    = pygame.Color("blue")
 
-BG_COLOR = pygame.Color("grey")
+BG_COLOR         = pygame.Color("grey")
 
-# Junk variable for testing
-# refactor all mentions of this
-ship_velocity253 = 0
+
+# Data Definitions
+
+@dataclass()
+class Ship:
+    x:        int = None
+    y:        int = None 
+    x_speed:  int = None
+    y_speed:  int = None
+
+@dataclass()
+class Invader:
+    x:        int = None
+    y:        int = None
+    x_speed:  int = None
+    y_speed:  int = None
+
+@dataclass()
+class Missile:
+    x:        int = None
+    y:        int = None
+    y_speed:  int = None
+
+@dataclass()
+class Game:
+    invaders: List[Invader]
+    missiles: List[Missile]
+    ship:     [Ship] = None
+
 
 # Functions
 
-def handleInput():
-    global ship_velocity253
+def handleInput(g):
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
-                ship_velocity253 -= SHIP_SPEED
+                g.ship.x_speed -= SHIP_SPEED
             if event.key == pygame.K_RIGHT:
-                ship_velocity253 += SHIP_SPEED
+                g.ship.x_speed += SHIP_SPEED
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT:
-                ship_velocity253 = 0
+                g.ship.x_speed = 0
             if event.key == pygame.K_RIGHT:
-                ship_velocity253 = 0
-
+                g.ship.x_speed = 0
+    return g
 
 def renderDisplay():
     SCREEN.fill(BG_COLOR)
@@ -64,24 +91,79 @@ def renderDisplay():
     # Draw display
     pygame.display.flip()
 
-def tickGame():
-    SHIP.x += ship_velocity253
-    INVADER.y += INVADER_SPEED
+def tickShip(s):
+    """
+    Ship -> Ship
+    ticks the given ship by adding ship.x_speed to ship.x, and updating the position of the SHIP rect object
+    """
+    s.x += s.x_speed
+    SHIP.x = s.x
+    return s
+
+def tickInvaders(invaders):
+    """
+    ListOfInvaders -> ListOfInvaders
+    ticks each invader by adding INVADER_SPEED to their invader.x and invader.y
+    """
+    if len(invaders) < 1:
+        return []
+    else:
+        first_invader = tickInvader(invaders[0])
+        rest_invaders = tickInvaders(invaders[1:])
+        return [first_invader] + rest_invaders 
+
+def tickInvader(invader):
+    """
+    Invader -> Invader
+    ticks the invader by adding INVADER_SPEED to its invader.x and invader.y, and updates the position of the INVADER rect object
+    """
+    invader.x += invader.x_speed
+    invader.y += invader.y_speed
+    INVADER.x = invader.x
+    INVADER.y = invader.y
+    return invader
+
+def tickMissiles(missiles):
+    # !!!
+    #return missiles
+    pass
+
+def tickGame(g):
+    #tick Ship
+    g.ship = tickShip(g.ship)
+    
+    #tick Invaders
+    g.invaders = tickInvaders(g.invaders)
+
+    #tick Missiles
 
     #Collision detection
     if SHIP.colliderect(INVADER):
         print('Collision!')
- 
+
+    return g
 
 # Game loop
-while True:
-    handleInput()
-    
-    tickGame()
+def main():
+    s = Ship(SHIP_STARTING_X, SHIP_STARTING_Y, 0,)
+    i = Invader(INVADER_SPAWN_X, INVADER_SPAWN_Y, INVADER_SPEED, INVADER_SPEED)
+    i2 = Invader(INVADER_SPAWN_X, INVADER_SPAWN_Y, -INVADER_SPEED, INVADER_SPEED)
+    invaders = [i, i2]
+    g = Game(invaders, [], s)
+    """
+    !!!
+    Issue: how to handle creating multiple on screen invaders? Create a new rect object for each?
+           should the rect objects then be part of the dataclasses?
+    """
+    while True:
+        
+        handleInput(g)
+        
+        tickGame(g)
 
-    renderDisplay()
-    
-    clock.tick(60)
+        renderDisplay()
+        
+        clock.tick(60)
 
-
+main()
 
