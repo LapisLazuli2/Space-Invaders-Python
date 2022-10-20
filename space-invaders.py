@@ -9,9 +9,9 @@ clock = pygame.time.Clock()
 
 
 # Main window
-SCREEN_WIDTH = 768 / 2  # 3:4 aspect ratio to mimic vertical arcade shooters
+SCREEN_WIDTH  = 768 / 2  # 3:4 aspect ratio to mimic vertical arcade shooters
 SCREEN_HEIGHT = 1024 / 2
-SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+SCREEN        = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption('Space Invaders')
 
 
@@ -57,6 +57,10 @@ class Missile:
     y_speed:  int = None
 
 @dataclass()
+class Score:
+    score:    int = None
+    
+@dataclass()
 class Game:
     invaders: List[Invader]
     missiles: List[Missile]
@@ -82,12 +86,33 @@ def handleInput(g):
                 g.ship.x_speed = 0
     return g
 
-def renderDisplay():
+
+def renderInvaders(invaders):
+    """
+    Invaders -> Invaders
+    renders all the given invaders onto SCREEN
+    """
+    if len(invaders) < 1:
+        return []
+
+def renderDisplay(g):
+    """
+    Game -> Game
+    renders the ship and all the invaders and missiles within the Game structure
+    """
     SCREEN.fill(BG_COLOR)
+    
     # Draw player ship to display
+    #renderShip(g.ship)
     pygame.draw.rect(SCREEN, SHIP_COLOR, SHIP)
+
     # Draw invaders to display
+    renderInvaders(g.invaders)
     pygame.draw.ellipse(SCREEN, INVADER_COLOR, INVADER)
+
+    # Draw missiles to display
+    #renderMissiles(g.missiles)
+
     # Draw display
     pygame.display.flip()
 
