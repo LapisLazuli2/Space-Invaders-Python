@@ -57,14 +57,11 @@ class Missile:
     y_speed:  int = None
 
 @dataclass()
-class Score:
-    score:    int = None
-    
-@dataclass()
 class Game:
     invaders: List[Invader]
     missiles: List[Missile]
     ship:     [Ship] = None
+    score:    int    = None
 
 
 # Functions
@@ -87,30 +84,39 @@ def handleInput(g):
     return g
 
 
+def renderShip(s):
+    """
+    renders a ship at the given ship.x and ship.y values
+    """
+    SHIP.x = s.x
+    pygame.draw.rect(SCREEN, SHIP_COLOR, SHIP)
+
+
 def renderInvaders(invaders):
     """
     Invaders -> Invaders
     renders all the given invaders onto SCREEN
     """
+    # !!!
     if len(invaders) < 1:
         return []
 
 def renderDisplay(g):
     """
-    Game -> Game
     renders the ship and all the invaders and missiles within the Game structure
     """
     SCREEN.fill(BG_COLOR)
     
     # Draw player ship to display
-    #renderShip(g.ship)
-    pygame.draw.rect(SCREEN, SHIP_COLOR, SHIP)
+    renderShip(g.ship)
 
     # Draw invaders to display
-    renderInvaders(g.invaders)
-    pygame.draw.ellipse(SCREEN, INVADER_COLOR, INVADER)
+    # !!!
+    #renderInvaders(g.invaders)
+    #pygame.draw.ellipse(SCREEN, INVADER_COLOR, INVADER)
 
     # Draw missiles to display
+    # !!!
     #renderMissiles(g.missiles)
 
     # Draw display
@@ -119,10 +125,9 @@ def renderDisplay(g):
 def tickShip(s):
     """
     Ship -> Ship
-    ticks the given ship by adding ship.x_speed to ship.x, and updating the position of the SHIP rect object
+    ticks the given ship by adding ship.x_speed to ship.x
     """
     s.x += s.x_speed
-    SHIP.x = s.x
     return s
 
 def tickInvaders(invaders):
@@ -155,12 +160,15 @@ def tickMissiles(missiles):
 
 def tickGame(g):
     #tick Ship
-    g.ship = tickShip(g.ship)
+    # !!!
+    # Issue: seems like do not need to return values for these functions because they all manipulate the data in the dataclass
+    tickShip(g.ship)
     
     #tick Invaders
     g.invaders = tickInvaders(g.invaders)
 
     #tick Missiles
+    #g.missiles = tickMissiles(g.missiles)
 
     #Collision detection
     if SHIP.colliderect(INVADER):
@@ -170,24 +178,25 @@ def tickGame(g):
 
 # Game loop
 def main():
-    s = Ship(SHIP_STARTING_X, SHIP_STARTING_Y, 0,)
+    s = Ship(SHIP_STARTING_X, SHIP_STARTING_Y, 0, 0)
     i = Invader(INVADER_SPAWN_X, INVADER_SPAWN_Y, INVADER_SPEED, INVADER_SPEED)
     i2 = Invader(INVADER_SPAWN_X, INVADER_SPAWN_Y, -INVADER_SPEED, INVADER_SPEED)
     invaders = [i, i2]
-    g = Game(invaders, [], s)
+    missiles = []
+    score = 0
+    g = Game(invaders, missiles, s, score)
     """
     !!!
     Issue: how to handle creating multiple on screen invaders? Create a new rect object for each?
            should the rect objects then be part of the dataclasses?
     """
     while True:
-        
+        renderDisplay(g)
+
         handleInput(g)
-        
+
         tickGame(g)
 
-        renderDisplay()
-        
         clock.tick(60)
 
 main()
