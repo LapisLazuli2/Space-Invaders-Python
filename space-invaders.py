@@ -32,7 +32,7 @@ INVADER_SPEED    = 1
 INVADER_COLOR    = pygame.Color("blue")
 
 MISSILE_SIZE     = 30
-MISSILE_SPAWN_Y  = SCREEN_HEIGHT
+MISSILE_SPAWN_Y  = SCREEN_HEIGHT - SHIP_SIZE
 MISSILE          = pygame.Rect(0, MISSILE_SPAWN_Y, MISSILE_SIZE, MISSILE_SIZE)
 MISSILE_SPEED    = 1
 MISSILE_COLOR    = pygame.Color("black")
@@ -120,16 +120,17 @@ def renderInvader(invader):
 def renderMissiles(missiles):
     """
     renders all the given missiles onto SCREEN
-    !!!
     """
-    pass
+    for missile in missiles:
+        renderMissile(missile)
 
 def renderMissile(missile):
     """
     renders MISSILE onto SCREEN at the given missile.x and missile.y values
-    !!!
     """
-    pass
+    MISSILE.x = missile.x
+    MISSILE.y = missile.y
+    pygame.draw.rect(SCREEN, MISSILE_COLOR, MISSILE)
 
 def renderDisplay(g):
     """
@@ -137,42 +138,47 @@ def renderDisplay(g):
     """
     SCREEN.fill(BG_COLOR)
     
-    # Draw player ship to display
     renderShip(g.ship)
 
-    # Draw invaders to display
     renderInvaders(g.invaders)
 
-    # Draw missiles to display
-    # !!!
-    #renderMissiles(g.missiles)
+    renderMissiles(g.missiles)
 
     # Draw display
     pygame.display.flip()
 
 def tickShip(s):
     """
-    ticks the given ship by adding ship.x_speed to ship.x
+    ticks the given ship by adding its x_speed to its x value
     """
     s.x += s.x_speed
 
 def tickInvaders(invaders):
     """
-    ticks each invader by adding INVADER_SPEED to their invader.x and invader.y
+    ticks the given list of invaders
     """
     for invader in invaders:
         tickInvader(invader)
 
 def tickInvader(invader):
     """
-    ticks the invader by adding INVADER_SPEED to its invader.x and invader.y
+    ticks the invader by adding its x_speed and y_speed to its x and y values
     """
     invader.x += invader.x_speed
     invader.y += invader.y_speed
 
 def tickMissiles(missiles):
-    # !!!
-    pass
+    """
+    tick the given list of missiles
+    """
+    for missile in missiles:
+        tickMissile(missile)
+
+def tickMissile(missile):
+    """
+    ticks the given missile by subtracting its y_speed from its y value
+    """
+    missile.y -= missile.y_speed
 
 def tickGame(g):
 
@@ -180,8 +186,7 @@ def tickGame(g):
     
     tickInvaders(g.invaders)
 
-    #tick Missiles
-    #tickMissiles(g.missiles)
+    tickMissiles(g.missiles)
 
     #Collision detection
     if SHIP.colliderect(INVADER):
@@ -191,11 +196,13 @@ def tickGame(g):
 # Game loop
 def main():
     s = Ship(SHIP_STARTING_X, SHIP_STARTING_Y, 0, 0)
-    i = Invader(INVADER_SPAWN_X, INVADER_SPAWN_Y, INVADER_SPEED, INVADER_SPEED)
-    i2 = Invader(INVADER_SPAWN_X, 200, -INVADER_SPEED, INVADER_SPEED)
-    M1 = Missile(0, 0)
-    invaders = [i, i2]
-    missiles = [M1]
+    I = Invader(INVADER_SPAWN_X, INVADER_SPAWN_Y, INVADER_SPEED, INVADER_SPEED)
+    I2 = Invader(INVADER_SPAWN_X, 200, -INVADER_SPEED, INVADER_SPEED)
+    M1 = Missile(SHIP_STARTING_X, MISSILE_SPAWN_Y, MISSILE_SPEED)
+    M2 = Missile(SHIP_STARTING_X - 100, MISSILE_SPAWN_Y, MISSILE_SPEED)
+
+    invaders = [I, I2]
+    missiles = [M1, M2]
     score = 0
     g = Game(invaders, missiles, s, score)
 
