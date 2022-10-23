@@ -67,6 +67,9 @@ class Game:
 # Functions
 
 def handleInput(g):
+    """
+    if left key is pressed changes the ship's x axis speed by -SHIP_SPEED, if right key is pressed then by +SHIP_SPEED
+    """
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
@@ -81,7 +84,6 @@ def handleInput(g):
                 g.ship.x_speed = 0
             if event.key == pygame.K_RIGHT:
                 g.ship.x_speed = 0
-    return g
 
 
 def renderShip(s):
@@ -94,12 +96,18 @@ def renderShip(s):
 
 def renderInvaders(invaders):
     """
-    Invaders -> Invaders
     renders all the given invaders onto SCREEN
+    !!!
     """
-    # !!!
     if len(invaders) < 1:
         return []
+
+def renderMissiles(missiles):
+    """
+    renders all the given missiles onto SCREEN
+    !!!
+    """
+    pass
 
 def renderDisplay(g):
     """
@@ -124,11 +132,9 @@ def renderDisplay(g):
 
 def tickShip(s):
     """
-    Ship -> Ship
     ticks the given ship by adding ship.x_speed to ship.x
     """
     s.x += s.x_speed
-    return s
 
 def tickInvaders(invaders):
     """
@@ -151,7 +157,6 @@ def tickInvader(invader):
     invader.y += invader.y_speed
     INVADER.x = invader.x
     INVADER.y = invader.y
-    return invader
 
 def tickMissiles(missiles):
     # !!!
@@ -159,22 +164,18 @@ def tickMissiles(missiles):
     pass
 
 def tickGame(g):
-    #tick Ship
-    # !!!
-    # Issue: seems like do not need to return values for these functions because they all manipulate the data in the dataclass
+
     tickShip(g.ship)
     
-    #tick Invaders
-    g.invaders = tickInvaders(g.invaders)
+    tickInvaders(g.invaders)
 
     #tick Missiles
-    #g.missiles = tickMissiles(g.missiles)
+    #tickMissiles(g.missiles)
 
     #Collision detection
     if SHIP.colliderect(INVADER):
         print('Collision!')
 
-    return g
 
 # Game loop
 def main():
