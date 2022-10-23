@@ -69,6 +69,8 @@ class Game:
 def handleInput(g):
     """
     if left key is pressed changes the ship's x axis speed by -SHIP_SPEED, if right key is pressed then by +SHIP_SPEED
+    if space bar is pressed the ship shoots missiles
+    !!!
     """
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -88,7 +90,7 @@ def handleInput(g):
 
 def renderShip(s):
     """
-    renders a ship at the given ship.x and ship.y values
+    renders SHIP onto SCREEN at the given ship.x value
     """
     SHIP.x = s.x
     pygame.draw.rect(SCREEN, SHIP_COLOR, SHIP)
@@ -96,11 +98,18 @@ def renderShip(s):
 
 def renderInvaders(invaders):
     """
-    renders all the given invaders onto SCREEN
-    !!!
+    renders all the given invaders
     """
-    if len(invaders) < 1:
-        return []
+    for invader in invaders:
+        renderInvader(invader)
+
+def renderInvader(invader):
+    """
+    renders INVADER onto SCREEN at the given invader.x and invader.y values
+    """
+    INVADER.x = invader.x
+    INVADER.y = invader.y
+    pygame.draw.rect(SCREEN, INVADER_COLOR, INVADER)
 
 def renderMissiles(missiles):
     """
@@ -109,9 +118,16 @@ def renderMissiles(missiles):
     """
     pass
 
+def renderMissile(missile):
+    """
+    renders MISSILE onto SCREEN at the given missile.x and missile.y values
+    !!!
+    """
+    pass
+
 def renderDisplay(g):
     """
-    renders the ship and all the invaders and missiles within the Game structure
+    renders the ship and all the invaders and missiles within the given Game structure
     """
     SCREEN.fill(BG_COLOR)
     
@@ -119,9 +135,7 @@ def renderDisplay(g):
     renderShip(g.ship)
 
     # Draw invaders to display
-    # !!!
-    #renderInvaders(g.invaders)
-    #pygame.draw.ellipse(SCREEN, INVADER_COLOR, INVADER)
+    renderInvaders(g.invaders)
 
     # Draw missiles to display
     # !!!
@@ -138,25 +152,23 @@ def tickShip(s):
 
 def tickInvaders(invaders):
     """
-    ListOfInvaders -> ListOfInvaders
     ticks each invader by adding INVADER_SPEED to their invader.x and invader.y
     """
-    if len(invaders) < 1:
-        return []
-    else:
-        first_invader = tickInvader(invaders[0])
-        rest_invaders = tickInvaders(invaders[1:])
-        return [first_invader] + rest_invaders 
+    # if len(invaders) < 1:
+    #     return []
+    # else:
+    #     first_invader = tickInvader(invaders[0])
+    #     rest_invaders = tickInvaders(invaders[1:])
+    #     return [first_invader] + rest_invaders 
+    for invader in invaders:
+        tickInvader(invader)
 
 def tickInvader(invader):
     """
-    Invader -> Invader
-    ticks the invader by adding INVADER_SPEED to its invader.x and invader.y, and updates the position of the INVADER rect object
+    ticks the invader by adding INVADER_SPEED to its invader.x and invader.y
     """
     invader.x += invader.x_speed
     invader.y += invader.y_speed
-    INVADER.x = invader.x
-    INVADER.y = invader.y
 
 def tickMissiles(missiles):
     # !!!
@@ -181,16 +193,12 @@ def tickGame(g):
 def main():
     s = Ship(SHIP_STARTING_X, SHIP_STARTING_Y, 0, 0)
     i = Invader(INVADER_SPAWN_X, INVADER_SPAWN_Y, INVADER_SPEED, INVADER_SPEED)
-    i2 = Invader(INVADER_SPAWN_X, INVADER_SPAWN_Y, -INVADER_SPEED, INVADER_SPEED)
+    i2 = Invader(INVADER_SPAWN_X, 200, -INVADER_SPEED, INVADER_SPEED)
     invaders = [i, i2]
     missiles = []
     score = 0
     g = Game(invaders, missiles, s, score)
-    """
-    !!!
-    Issue: how to handle creating multiple on screen invaders? Create a new rect object for each?
-           should the rect objects then be part of the dataclasses?
-    """
+
     while True:
         renderDisplay(g)
 
