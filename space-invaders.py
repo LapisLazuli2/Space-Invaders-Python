@@ -32,7 +32,7 @@ INVADER_SPEED    = 1
 INVADER_COLOR    = pygame.Color("blue")
 
 MISSILE_SIZE     = 30
-MISSILE_SPAWN_Y  = SCREEN_HEIGHT - SHIP_SIZE
+MISSILE_SPAWN_Y  = SCREEN_HEIGHT - SHIP_SIZE * 1.5
 MISSILE          = pygame.Rect(0, MISSILE_SPAWN_Y, MISSILE_SIZE, MISSILE_SIZE)
 MISSILE_SPEED    = 1
 MISSILE_COLOR    = pygame.Color("black")
@@ -87,12 +87,23 @@ def handleInput(g):
                 g.ship.x_speed -= SHIP_SPEED
             if event.key == pygame.K_RIGHT:
                 g.ship.x_speed += SHIP_SPEED
+            if event.key == pygame.K_SPACE:
+                shootMissile(g)
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT:
                 g.ship.x_speed = 0
             if event.key == pygame.K_RIGHT:
                 g.ship.x_speed = 0
 
+
+def shootMissile(g):
+    """
+    adds a Missile object to the given list of missiles, with the missiles' x = ship's x position, y = MISSILE_SPAWN_Y, and y_speed = MISSILE_SPEED
+    !!!
+    Issue: add some sort of cooldown to prevent player from shooting walls of missiles
+    """
+    m = Missile(g.ship.x, MISSILE_SPAWN_Y, MISSILE_SPEED)
+    g.missiles.append(m)
 
 def renderShip(s):
     """
@@ -202,7 +213,7 @@ def main():
     M2 = Missile(SHIP_STARTING_X - 100, MISSILE_SPAWN_Y, MISSILE_SPEED)
 
     invaders = [I, I2]
-    missiles = [M1, M2]
+    missiles = []
     score = 0
     g = Game(invaders, missiles, s, score)
 
