@@ -31,6 +31,12 @@ INVADER          = pygame.Rect(INVADER_SPAWN_X, INVADER_SPAWN_Y, INVADER_SIZE, I
 INVADER_SPEED    = 1
 INVADER_COLOR    = pygame.Color("blue")
 
+MISSILE_SIZE     = 30
+MISSILE_SPAWN_Y  = SCREEN_HEIGHT
+MISSILE          = pygame.Rect(0, MISSILE_SPAWN_Y, MISSILE_SIZE, MISSILE_SIZE)
+MISSILE_SPEED    = 1
+MISSILE_COLOR    = pygame.Color("black")
+
 BG_COLOR         = pygame.Color("grey")
 
 
@@ -154,12 +160,6 @@ def tickInvaders(invaders):
     """
     ticks each invader by adding INVADER_SPEED to their invader.x and invader.y
     """
-    # if len(invaders) < 1:
-    #     return []
-    # else:
-    #     first_invader = tickInvader(invaders[0])
-    #     rest_invaders = tickInvaders(invaders[1:])
-    #     return [first_invader] + rest_invaders 
     for invader in invaders:
         tickInvader(invader)
 
@@ -172,7 +172,6 @@ def tickInvader(invader):
 
 def tickMissiles(missiles):
     # !!!
-    #return missiles
     pass
 
 def tickGame(g):
@@ -194,8 +193,9 @@ def main():
     s = Ship(SHIP_STARTING_X, SHIP_STARTING_Y, 0, 0)
     i = Invader(INVADER_SPAWN_X, INVADER_SPAWN_Y, INVADER_SPEED, INVADER_SPEED)
     i2 = Invader(INVADER_SPAWN_X, 200, -INVADER_SPEED, INVADER_SPEED)
+    M1 = Missile(0, 0)
     invaders = [i, i2]
-    missiles = []
+    missiles = [M1]
     score = 0
     g = Game(invaders, missiles, s, score)
 
