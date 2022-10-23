@@ -1,3 +1,4 @@
+from operator import truediv
 import pygame
 import sys
 from dataclasses import dataclass
@@ -74,9 +75,9 @@ class Game:
 
 def handleInput(g):
     """
-    if left key is pressed changes the ship's x axis speed by -SHIP_SPEED, if right key is pressed then by +SHIP_SPEED
+    if left key is pressed changes the ship's x axis speed by -SHIP_SPEED
+    if right key is pressed then by +SHIP_SPEED
     if space bar is pressed the ship shoots missiles
-    !!!
     """
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -191,6 +192,60 @@ def tickMissile(missile):
     """
     missile.y -= missile.y_speed
 
+def checkShipOffscreen(s):
+    """
+    !!!
+    """
+    pass
+
+def checkInvadersOffscreen(invaders):
+    """
+    !!!
+    """
+    pass
+
+def checkMissilesOffscreen(missiles):
+    """
+    !!!
+    """
+    pass
+
+def checkMissileHitInvader(g):
+    """
+    !!!
+    """
+    pass
+
+def invaderWins(g):
+    """
+    !!!
+    """
+   #Collision detection
+    return SHIP.colliderect(INVADER)
+
+def endGame():
+    """
+    !!!
+    """
+    print('Collision!')
+
+def checkCollision(g):
+    """
+    prevents the ship and invaders from going offscreen, and removes offscreen missiles 
+    removes invaders if they are hit by missiles
+    ends the game if any invader makes it to the bottom of the screen
+    """
+    checkShipOffscreen(g.ship)
+
+    checkInvadersOffscreen(g.invaders)
+
+    checkMissilesOffscreen(g.missiles)
+
+    checkMissileHitInvader(g)
+
+    if invaderWins(g):
+        endGame()
+ 
 def tickGame(g):
 
     tickShip(g.ship)
@@ -199,9 +254,8 @@ def tickGame(g):
 
     tickMissiles(g.missiles)
 
-    #Collision detection
-    if SHIP.colliderect(INVADER):
-        print('Collision!')
+    checkCollision(g)
+ 
 
 
 # Game loop
