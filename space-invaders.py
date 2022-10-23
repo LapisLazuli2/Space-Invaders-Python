@@ -212,6 +212,7 @@ def checkMissilesOffscreen(missiles):
 
 def checkMissileHitInvader(g):
     """
+    increase score if missile hits invader...
     !!!
     """
     pass
@@ -266,6 +267,7 @@ def main():
     M1 = Missile(SHIP_STARTING_X, MISSILE_SPAWN_Y, MISSILE_SPEED)
     M2 = Missile(SHIP_STARTING_X - 100, MISSILE_SPAWN_Y, MISSILE_SPEED)
 
+    # To do: add score functionality. Score constants and render function.
     invaders = [I, I2]
     missiles = []
     score = 0
