@@ -219,9 +219,17 @@ def checkInvaderOffscreen(invader):
 
 def checkMissilesOffscreen(missiles):
     """
-    !!!
+    removes any missiles that go past the top screen boundary
     """
-    pass
+    for missile in missiles:
+        if isMissileOffscreen(missile):
+            missiles.remove(missile)
+
+def isMissileOffscreen(missile):
+    """
+    returns true if the given missile.y < 0
+    """
+    return missile.y < 0
 
 def checkMissileHitInvader(g):
     """
