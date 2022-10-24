@@ -32,7 +32,7 @@ INVADER          = pygame.Rect(INVADER_SPAWN_X, INVADER_SPAWN_Y, INVADER_SIZE, I
 INVADER_SPEED    = 1
 INVADER_COLOR    = pygame.Color("blue")
 
-MISSILE_SIZE     = 15
+MISSILE_SIZE     = 30
 MISSILE_SPAWN_Y  = SCREEN_HEIGHT - SHIP_SIZE * 1.5
 MISSILE          = pygame.Rect(0, MISSILE_SPAWN_Y, MISSILE_SIZE, MISSILE_SIZE)
 MISSILE_SPEED    = 4
@@ -235,8 +235,10 @@ def checkMissileHitInvader(g):
     """
     increase score if missile hits invader...
     !!!
+    Issue: colliderect checks only work for the first INVADER or MISSILE, does not work for any extra ones past the first
     """
-    pass
+    if INVADER.colliderect(MISSILE):
+        print('missile hit!')
 
 def invaderWins(g):
     """
