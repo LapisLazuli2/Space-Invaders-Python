@@ -194,7 +194,7 @@ def tickMissile(missile):
 
 def checkShipOffscreen(s):
     """
-    keeps the ship within screen boundaries
+    keeps the ship within the vertical screen boundaries
     if the ship's x < 0 resets it to x = 0 and if ship's x > SCREEN_WIDTH - SHIP_SIZE resets it to x = SCREEN_WIDTH - SHIP_SIZE
     """
     if s.x < 0:
@@ -204,9 +204,18 @@ def checkShipOffscreen(s):
 
 def checkInvadersOffscreen(invaders):
     """
-    !!!
+    keeps invaders within the vertical screen boundaries
     """
-    pass
+    for invader in invaders:
+        checkInvaderOffscreen(invader)
+
+def checkInvaderOffscreen(invader):
+    """
+    keeps the given invader within the vertical screen boundaries by changing its direction if it touches a boundary
+    if invader.x < 0 or invader.x > SCREEN_WIDTH - INVADER_SIZE, then multiply invader.x_speed by -1
+    """
+    if invader.x < 0 or invader.x > SCREEN_WIDTH - INVADER_SIZE:
+        invader.x_speed *= -1
 
 def checkMissilesOffscreen(missiles):
     """
