@@ -38,6 +38,12 @@ MISSILE          = pygame.Rect(0, MISSILE_SPAWN_Y, MISSILE_SIZE, MISSILE_SIZE)
 MISSILE_SPEED    = 4
 MISSILE_COLOR    = pygame.Color("black")
 
+SCORE_FONT_SIZE  = 24
+SCORE_FONT       = pygame.font.Font("freesansbold.ttf", SCORE_FONT_SIZE)
+SCORE_COLOR      = pygame.Color("red")
+SCORE_X          = SCREEN_WIDTH * 0.90
+SCORE_Y          = 10    
+
 BG_COLOR         = pygame.Color("grey")
 
 
@@ -144,6 +150,16 @@ def renderMissile(missile):
     MISSILE.y = missile.y
     pygame.draw.rect(SCREEN, MISSILE_COLOR, MISSILE)
 
+def renderScore(score):
+    """
+    renders the given value of score onto SCREEN
+    !!!
+    Issue: when the amount of digits in score increases it looks visually unpleasnt because the render location doesn't change
+    """
+    score_surface = SCORE_FONT.render(f"{score}", False, SCORE_COLOR)
+    SCREEN.blit(score_surface, (SCORE_X, SCORE_Y))
+
+
 def renderDisplay(g):
     """
     renders the ship and all the invaders and missiles within the given Game structure
@@ -155,6 +171,8 @@ def renderDisplay(g):
     renderInvaders(g.invaders)
 
     renderMissiles(g.missiles)
+
+    renderScore(g.score)
 
     # Draw display
     pygame.display.flip()
