@@ -251,14 +251,22 @@ def isMissileOffscreen(missile):
     """
     return missile.y < 0
 
+def increaseScore(g):
+    """
+    increases the player's score by ...
+    """
+    g.score += 10
+
 def checkMissileHitInvader(g):
     """
-    increase score if missile hits invader...
-    !!!
-    Issue: colliderect checks only work for the first INVADER or MISSILE, does not work for any extra ones past the first
+    if the x and y of a missile and invader are within MISSILE_SIZE/2 of each other, remove both elements from the game, and increase the player's score
     """
-    if INVADER.colliderect(MISSILE):
-        print('missile hit!')
+    for invader in g.invaders:
+        for missile in g.missiles:
+            if abs(missile.x - invader.x) < MISSILE_SIZE/2 and abs(missile.y - invader.y) < MISSILE_SIZE/2:
+                g.invaders.remove(invader)
+                g.missiles.remove(missile)
+                increaseScore(g)
 
 def invaderWins(g):
     """
@@ -310,7 +318,6 @@ def main():
     M1 = Missile(SHIP_STARTING_X, MISSILE_SPAWN_Y, MISSILE_SPEED)
     M2 = Missile(SHIP_STARTING_X - 100, MISSILE_SPAWN_Y, MISSILE_SPEED)
 
-    # To do: add score functionality. Score constants and render function.
     invaders = [I, I2]
     missiles = []
     score = 0
