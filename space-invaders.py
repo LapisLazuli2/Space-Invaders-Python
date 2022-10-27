@@ -107,10 +107,12 @@ def shootMissile(g):
     """
     adds a Missile object to the given list of missiles, with the missiles' x = ship's x position, y = MISSILE_SPAWN_Y, and y_speed = MISSILE_SPEED
     !!!
+    there can be a max of 4 missiles on screen so only add new missiles if g.missiles has less than 4 missiles
     Issue: add some sort of cooldown to prevent player from shooting walls of missiles
     """
-    m = Missile(g.ship.x, MISSILE_SPAWN_Y, MISSILE_SPEED)
-    g.missiles.append(m)
+    if len(g.missiles) < 4:
+        m = Missile(g.ship.x, MISSILE_SPAWN_Y, MISSILE_SPEED)
+        g.missiles.append(m)
 
 def renderShip(s):
     """
