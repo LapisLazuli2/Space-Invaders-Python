@@ -253,7 +253,7 @@ def isMissileOffscreen(missile):
 
 def increaseScore(g):
     """
-    increases the player's score by ...
+    increases the player's score by 10
     """
     g.score += 10
 
@@ -271,6 +271,8 @@ def checkMissileHitInvader(g):
 def invaderWins(g):
     """
     !!!
+    returns a bool
+    To do: refactor to detect collision based on the g.invaders list and g.ship's position
     """
    #Collision detection
     return SHIP.colliderect(INVADER)
@@ -322,7 +324,7 @@ def main():
     missiles = []
     score = 0
     g = Game(invaders, missiles, s, score)
-
+    # !!! To do: add a function for spawning invaders
     while True:
         renderDisplay(g)
 
