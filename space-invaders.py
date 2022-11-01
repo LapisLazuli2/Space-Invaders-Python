@@ -32,9 +32,9 @@ INVADER          = pygame.Rect(INVADER_SPAWN_X, INVADER_SPAWN_Y, INVADER_SIZE, I
 INVADER_SPEED    = 1
 INVADER_COLOR    = pygame.Color("blue")
 
-MISSILE_SIZE     = 30
+MISSILE_SIZE     = 15
 MISSILE_SPAWN_Y  = SCREEN_HEIGHT - SHIP_SIZE * 1.5
-MISSILE          = pygame.Rect(0, MISSILE_SPAWN_Y, MISSILE_SIZE, MISSILE_SIZE)
+MISSILE          = pygame.Rect(0, MISSILE_SPAWN_Y, MISSILE_SIZE/2, MISSILE_SIZE)
 MISSILE_SPEED    = 4
 MISSILE_COLOR    = pygame.Color("black")
 
@@ -311,6 +311,8 @@ def tickGame(g):
     tickMissiles(g.missiles)
 
     checkCollision(g)
+
+    #print(clock)
  
 
 
