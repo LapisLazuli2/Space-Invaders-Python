@@ -3,6 +3,7 @@ import pygame
 import sys
 from dataclasses import dataclass
 from typing import List
+import random
 
 # Setup
 pygame.init()
@@ -179,6 +180,19 @@ def renderDisplay(g):
     # Draw display
     pygame.display.flip()
 
+def spawnInvaders(invaders):
+    """
+    spawns 3 invaders at the top of the screen at a random x position (50 < x < SCREEN_WIDTH - 50), and who fly in a random x direction (INVADER_SPEED * 1 or -1)
+    creates illusion of staggering the spawns by using a random y position (-500 < y < 0) to make the invaders appear at the top of the screen at different times
+    makes the invaders fly a different angles by modifying the x speed by a random factor between 0.30 and 1
+    !!! To do: refactor and rebalance the spawn behavior to make the gameplay more varied
+    """
+    for i in range(3):
+        invaders.append(Invader((random.randint(0 + 50, SCREEN_WIDTH - 50)), 
+                        random.randint(-300, 0), 
+                        INVADER_SPEED * random.choice([1, -1]) * random.randint(3, 10)/10, 
+                        INVADER_SPEED))
+
 def tickShip(s):
     """
     ticks the given ship by adding its x_speed to its x value
@@ -187,8 +201,10 @@ def tickShip(s):
 
 def tickInvaders(invaders):
     """
-    ticks the given list of invaders
+    spawns invaders if there are no current invaders and ticks the given list of invaders
     """
+    if len(invaders) < 1:
+        spawnInvaders(invaders)
     for invader in invaders:
         tickInvader(invader)
 
@@ -312,9 +328,10 @@ def tickGame(g):
 
     checkCollision(g)
 
+    # TIME = pygame.time.get_ticks()
+    # print(TIME/1000)
     #print(clock)
  
-
 
 # Game loop
 def main():
@@ -324,11 +341,12 @@ def main():
     M1 = Missile(SHIP_STARTING_X, MISSILE_SPAWN_Y, MISSILE_SPEED)
     M2 = Missile(SHIP_STARTING_X - 100, MISSILE_SPAWN_Y, MISSILE_SPEED)
 
-    invaders = [I, I2]
+    #invaders = [I, I2]
+    invaders = []
     missiles = []
     score = 0
     g = Game(invaders, missiles, s, score)
-    # !!! To do: add a function for spawning invaders
+    # !!! To do: implement game over functionality
     while True:
         renderDisplay(g)
 
