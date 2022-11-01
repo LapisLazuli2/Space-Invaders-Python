@@ -259,11 +259,11 @@ def increaseScore(g):
 
 def checkMissileHitInvader(g):
     """
-    if the x and y of a missile and invader are within MISSILE_SIZE/2 of each other, remove both elements from the game, and increase the player's score
+    if the x and y of a missile and invader are within INVADER_SIZE/2 of each other, remove both elements from the game, and increase the player's score
     """
     for invader in g.invaders:
         for missile in g.missiles:
-            if abs(missile.x - invader.x) < MISSILE_SIZE/2 and abs(missile.y - invader.y) < MISSILE_SIZE/2:
+            if abs(missile.x - invader.x) < INVADER_SIZE/2 and abs(missile.y - invader.y) < INVADER_SIZE/2:
                 g.invaders.remove(invader)
                 g.missiles.remove(missile)
                 increaseScore(g)
