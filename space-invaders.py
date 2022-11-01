@@ -270,18 +270,20 @@ def checkMissileHitInvader(g):
 
 def invaderWins(g):
     """
-    !!!
-    returns a bool
-    To do: refactor to detect collision based on the g.invaders list and g.ship's position
+    if the invader touches the bottom of the screen (invader.y >= SCREEN_HEIGHT) or touches the ship (inv.y == ship.y and both x within SHIP_SIZE/2 of eachother),
+    then removes the invader and returns true
     """
-   #Collision detection
-    return SHIP.colliderect(INVADER)
+    for invader in g.invaders:
+        if invader.y >= SCREEN_HEIGHT or (invader.y == g.ship.y and abs(invader.x - g.ship.x) < SHIP_SIZE/2):
+            g.invaders.remove(invader)
+            return True
 
 def endGame():
     """
     !!!
+    To do: ends the game
     """
-    print('Collision!')
+    print('Game Over!')
 
 def checkCollision(g):
     """
